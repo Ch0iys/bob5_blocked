@@ -19,9 +19,11 @@ def send_fin(data):
 	sPORT = data[Ether].sport
 	dPORT = data[Ether].dport
 	
-	print "seq_num : " + str(next_seq)
-	print "sIP : %s, dIP : %s" % (sIP, dIP)
-	print "sPORT : %s, dPORT : %s" % (sPORT, dPORT)
+	FIN=TCP(sport=dPORT, dport=sPORT, flags="FA", ack=next_seq, seq=data.ack)
+	send(IP(src=dIP,dst=sIP)/FIN, verbose=False)
+#	print "seq_num : " + str(next_seq)
+#	print "sIP : %s, dIP : %s" % (sIP, dIP)
+#	print "sPORT : %s, dPORT : %s" % (sPORT, dPORT)
 
 def parse_get(data):
 	ok = re.findall(".*GET.*?HTTP/(1.1|1.0).*", data)
