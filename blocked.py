@@ -18,16 +18,18 @@ def send_fin(data):
 	dIP = data[IP].dst
 	sPORT = data[Ether].sport
 	dPORT = data[Ether].dport
-	
-	FIN=TCP(sport=dPORT, dport=sPORT, flags="FA", ack=next_seq, seq=data.ack)
-	send(IP(src=dIP,dst=sIP)/FIN, verbose=False)
+	sMAC = data[Ether].src
+	dMAC = data[Ether].dst	
+
+	PKT=Ether(src=dMAC, dst=sMAC)/IP(src=dIP,dst=sIP)/TCP(sport=dPORT, dport=sPORT, flags="FA", ack=next_seq, seq=data.ack)/"blocked!"
+	sendp(PKT, verbose=False)
+	print PKT.show()
 #	print "seq_num : " + str(next_seq)
 #	print "sIP : %s, dIP : %s" % (sIP, dIP)
-#	print "sPORT : %s, dPORT : %s" % (sPORT, dPORT)
+#	print "sMAC : %s, dMAC : %s" % (sMAC, dMAC)
 
 def parse_get(data):
-	ok = re.findall(".*GET.*?HTTP/(1.1|1.0).*", data)
-	if ok: return 31337
+	if "GET" in data[:5]: return 31337
 
 def proc(packet):
 	if packet.haslayer(IP):
