@@ -21,7 +21,7 @@ def send_fin(data):
 	sMAC = data[Ether].src
 	dMAC = data[Ether].dst	
 
-	PKT=Ether(src=dMAC, dst=sMAC)/IP(src=dIP,dst=sIP)/TCP(sport=dPORT, dport=sPORT, flags="FA", ack=next_seq, seq=data.ack)/"blocked!"
+	PKT=Ether(src=dMAC, dst=sMAC)/IP(src=dIP,dst=sIP)/TCP(sport=dPORT, dport=sPORT, flags="FA", ack=next_seq, seq=data.ack)/"HTTP/1.1 302 Found\r\nLocation: http://gilgil.net\r\n"
 	sendp(PKT, verbose=False)
 	print PKT.show()
 #	print "seq_num : " + str(next_seq)
